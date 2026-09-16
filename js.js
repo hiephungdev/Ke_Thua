@@ -128,26 +128,61 @@ private method : phương thức riêng tư
 */
 
 class Wallet{ //  Wallet : Ví 
+    #pin;
+    #balance;
+    #isPinEntered = false;
     constructor(bankName , pin) {
         this.bankName = bankName;
-        this.pin = pin;
-        this.balance = 0;
+        this.#pin = pin;
+        this.#balance = 0;
     }
 
     deposit(value){
-        this.balance = value;
+        if(!this.#isPinEntered){
+            console.log("KIểm tra lại mã pin");
+            return;
+        }
+        this.#balance = value;
+    }
+
+    // private method 
+    #validatePin(pin){
+        return this.#pin == pin;  
+    }
+
+    //public method
+    enterPin(pin){
+        if(this.#validatePin(pin)){
+            this.#isPinEntered = true;
+        }
+        else{
+            console.log("Invalid pin");
+        }
     }
 
     withdraw(){
-        if(value > this.balance){
+        if(!this.#isPinEntered){
+            console.log("Kiểm tra lại mã pin");
+            return;
+        }
+        if(value > this.#balance){
             console.log("số tiền trong tài khoản không đủ");
         }
         else{
-            this.balance -= value;
+            this.#balance -= value;
             console.log("rút tiền thành công");
         }
+    }
+
+    get balance(){
+        if(!this.#isPinEntered){
+            console.log("KIểm tra lại mã pin");
+            return;
+        }
+        return this.#balance;
     }
 }
 
 
 // tính đóng gói 
+// chỉ cần thêm dấu # không thể truy cập được từ bên ngoài 
